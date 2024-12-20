@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle del Invernadero</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalle del Invernadero</h1>
+        <p>ID: <span th:text="${invernadero.invernaderoId}"></span></p>
+        <p>Tipo: <span th:text="${invernadero.getActuadorRiego()}"></span></p>
+        <br>
+        <a th:href="@{/listaInvernaderos}">Volver a la Lista</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invernaderos5</title>
+</head>
+<body>
+    <h1>Agregar Invernadero</h1>
+    <form id="invernaderoForm">
+        <label for="id">ID del Invernadero:</label>
+        <input type="text" id="id" name="id" required>
+        <br>
+        <label for="actuadorRiego">Tipo de Actuador:</label>
+        <input type="radio" id="actuadorRiegoLluvia" name="actuadorRiego" value="lluvia" required>
+        <label for="actuadorRiegoLluvia">ActuadorRiegoLluvia</label>
+        <input type="radio" id="actuadorRiegoNormal" name="actuadorRiego" value="normal" required>
+        <label for="actuadorRiegoNormal">ActuadorRiegoNormal</label>
+        <br>
+        <button type="submit">Agregar Invernadero</button>
+    </form>
+    <h1>Lista de Invernaderos</h1>
+    <ul id="invernaderos-list"></ul>
+
+    <script>
+        document.getElementById('invernaderoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const id = document.getElementById('id').value;
+            const actuadorRiego = document.querySelector('input[name="actuadorRiego"]:checked').value;
+
+            fetch('/api/invernadero/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ idInvernadero: id, actuadorRiego: actuadorRiego })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(JSON.stringify(data))
+                console.log('Invernadero agregado:', data);
+                fetchInvernaderos();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        function fetchInvernaderos() {
+            fetch('/api/invernaderos')
+                .then(response => response.json())
+                .then(data => {
+                    //alert(JSON.stringify(data))
+                    const list = document.getElementById('invernaderos-list');
+                    list.innerHTML = '';
+                    data.forEach(invernadero => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `ID: ${invernadero.invernaderoId} - Tipo: ${invernadero.actuadorRiego}`;
+                        list.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Fetch invernaderos on page load
+        fetchInvernaderos();
+    </script>
+</body>
+</html>
